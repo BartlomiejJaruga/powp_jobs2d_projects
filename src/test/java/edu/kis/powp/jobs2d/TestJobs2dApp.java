@@ -26,6 +26,9 @@ import edu.kis.powp.jobs2d.transformations.FlipTransformationDecorator;
 import edu.kis.powp.jobs2d.transformations.RotateTransformationDecorator;
 import edu.kis.powp.jobs2d.transformations.ScaleTransformationDecorator;
 
+import java.awt.*;
+import java.awt.event.ActionEvent;
+
 public class TestJobs2dApp {
     private final static Logger logger = Logger.getLogger(Logger.GLOBAL_LOGGER_NAME);
 

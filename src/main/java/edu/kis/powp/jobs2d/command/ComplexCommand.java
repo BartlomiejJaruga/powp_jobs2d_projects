@@ -1,7 +1,10 @@
 package edu.kis.powp.jobs2d.command;
 
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import edu.kis.powp.jobs2d.Job2dDriver;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -10,7 +13,6 @@ import java.util.List;
  * Implementation of ICompoundCommand for running multiple commands.
  */
 public class ComplexCommand implements ICompoundCommand {
-
     private final List<DriverCommand> commandList;
 
     private ComplexCommand(List<DriverCommand> commandList) {
@@ -94,6 +96,44 @@ public class ComplexCommand implements ICompoundCommand {
 
         public ComplexCommand build() {
             return new ComplexCommand(commands);
+        }
+
+        public void loadCommandsFromJson(String filename) {
+            this.commands.clear();
+            ObjectMapper mapper = new ObjectMapper();
+            File file = new File(filename);
+            try {
+                List<JsonCommandEntry> commands = mapper.readValue(file, new TypeReference<List<JsonCommandEntry>>() {});
+
+                for (JsonCommandEntry command : commands) {
+
+                    String commandName = command.getCommandName();
+                    int x = command.getX();
+                    int y = command.getY();
+
+                    DriverCommand newCommand;
+
+                    switch(commandName) {
+                        case "operateTo":
+                            newCommand = new OperateToCommand(x, y);
+                            break;
+                        case "setPosition":
+                            newCommand = new SetPositionCommand(x, y);
+                            break;
+                        default:
+                            newCommand = null;
+                    }
+
+                    // TODO change so user knows that there was bad command name in JSON
+                    if(newCommand == null){
+                        continue;
+                    }
+
+                    this.addCommand(newCommand);
+                }
+            } catch(Exception e) {
+                e.printStackTrace();
+            }
         }
 
         public void addCommand(DriverCommand command) {

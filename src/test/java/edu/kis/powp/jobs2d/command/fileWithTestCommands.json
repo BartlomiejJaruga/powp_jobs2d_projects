@@ -1,0 +1,6 @@
+[
+  {"commandName": "setPosition", "x": 100, "y": 0},
+  {"commandName": "operateTo", "x": 100, "y": 100},
+  {"commandName": "operateTo", "x": 0, "y": 100},
+  {"commandName": "operateTo", "x": 0, "y": 0}
+]
